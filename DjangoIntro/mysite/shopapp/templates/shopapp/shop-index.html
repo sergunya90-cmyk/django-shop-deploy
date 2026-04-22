@@ -1,0 +1,13 @@
+{% extends 'shopapp/base.html' %} {% block title %}Каталог{% endblock %} {% block content %}
+    <h1>{{ shop_name|upper }}</h1>
+    
+    <p>Всего товаров: {{ products|length }}</p>
+
+    <ul>
+        {% for item in products %} <li>
+                Товар: {{ item.name }} | 
+                Цена: {{ item.price|default:"Бесплатно!" }} 
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
