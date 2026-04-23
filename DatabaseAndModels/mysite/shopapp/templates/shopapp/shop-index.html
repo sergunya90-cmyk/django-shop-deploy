@@ -1,0 +1,8 @@
+{% extends 'shopapp/base.html' %}
+{% block content %}
+    <h1>Главная страница</h1>
+    <ul>
+        <li><a href="{% url 'shopapp:products_list' %}">Список товаров</a></li>
+        <li><a href="{% url 'shopapp:orders_list' %}">Список заказов</a></li>
+    </ul>
+{% endblock %}
