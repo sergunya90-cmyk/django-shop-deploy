@@ -1,0 +1,10 @@
+{% extends 'shopapp/base.html' %}
+{% block content %}
+    <h1>Товары</h1>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} (Цена: {{ product.price }})</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'shopapp:index' %}">Назад</a>
+{% endblock %}
