@@ -1,0 +1,304 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #ffffff;
+}
+
+.header-nav a {
+    color: black;
+    text-decoration: none;
+    margin-right: 30px;
+    font-size: 16px;
+}
+
+.header-nav a:last-child {
+    margin-right: 0;
+}
+
+.header-nav a:hover {
+    text-decoration: underline;
+}
+
+.header-contacts {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.phone {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+header button {
+    padding: 10px 20px;
+    border: 1px solid black;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+header button:hover {
+    background-color: #f0f0f0;
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 80px 50px;
+    background-color: #f8f9fa;
+    min-height: 500px;
+}
+
+.hero-text {
+    width: 50%;
+}
+
+.hero h1 {
+    font-size: 54px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.hero h2 {
+    font-size: 22px;
+    font-weight: 400;
+    margin-top: 0;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.primary-btn {
+    background-color: #2b20f5;
+    color: white;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    background-color: #1a13ba;
+}
+
+.hero-image {
+    width: 45%;
+    min-height: 400px;
+    /* Указываем точный путь к картинке в твоей папке */
+    background-image: url('img/Изображение с человеком/man.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.portfolio {
+    padding: 60px 50px;
+}
+
+.portfolio h2 {
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.portfolio-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card {
+    width: 32%;
+}
+
+.card img {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+}
+
+.blue-block {
+    background-color: #2b20f5;
+    color: white;
+    padding: 80px 50px;
+}
+
+.blue-block h2,
+.blue-block p {
+    width: 50%;
+}
+
+.blue-block h2 {
+    font-size: 36px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    line-height: 1.3;
+}
+
+.blue-block p {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-bottom: 0;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 60px 50px;
+    background-color: #f8f9fa;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-col a {
+    color: black;
+    text-decoration: none;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.footer-col a:last-child {
+    margin-bottom: 0;
+}
+
+.footer-col a:hover {
+    text-decoration: underline;
+}
+
+.footer-social button {
+    padding: 10px 20px;
+    border: 1px solid black;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.footer-social button:hover {
+    background-color: #e0e0e0;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 300px;
+}
+
+.popup input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.popup .send-btn {
+    padding: 12px;
+    background-color: #2b20f5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.popup .send-btn:hover {
+    background-color: #1a13ba;
+}
+
+.what-i-do {
+    padding: 60px 50px;
+    background-color: #ffffff;
+}
+.what-i-do h2 {
+    font-size: 32px;
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+.features {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+.feature-item {
+    width: 22%;
+}
+.feature-item img {
+    width: 80px;
+    margin-bottom: 15px;
+}
+.feature-item p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+}
+.outline-btn {
+    padding: 10px 20px;
+    border: 1px solid black;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.outline-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.project-desc {
+    font-size: 14px;
+    margin-top: 15px;
+    color: #333;
+}
+
+.social-links img {
+    width: 24px;
+    height: 24px;
+    transition: opacity 0.3s;
+}
+.social-links img:hover {
+    opacity: 0.7;
+}
