@@ -6,26 +6,31 @@
 
 {% block body %}
   <h1>Orders:</h1>
+
+  <div style="margin-bottom: 20px;">
+      <a href="{% url 'shopapp:order_create' %}">Создать новый заказ</a>
+  </div>
+
   {% if orders %}
     <div>
       {% for order in orders %}
-        <div>
-          <p>Order by {% firstof order.user.first_name order.user.username %}</p>
-          <p>Promocode: <code>{{ order.promocode }}</code></p>
-          <p>Delivery address: {{ order.delivery_address }}</p>
-          <div>
-            Product in order:
-            <ul>
-              {% for product in order.products.all %}
-                <li>{{ product.name }} for ${{ product.price }}</li>
-              {% endfor %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <p>Order by: {% if order.user.first_name %}{{ order.user.first_name }}{% else %}{{ order.user.username }}{% endif %}</p>
+            <p>Promocode: <code>{{ order.promocode }}</code></p>
+            <p>Delivery address: {{ order.delivery_address }}</p>
 
-            </ul>
-          </div>
+            <div>
+              Products in order:
+              <ul>
+                {% for product in order.products.all %}
+                  <li>{{ product.name }} for ${{ product.price }}</li>
+                {% endfor %}
+              </ul>
+            </div>
 
+            <a href="{% url 'shopapp:order_details' pk=order.pk %}">Подробнее о заказе</a>
         </div>
       {% endfor %}
-
     </div>
   {% else %}
     <h3>No orders yet</h3>
