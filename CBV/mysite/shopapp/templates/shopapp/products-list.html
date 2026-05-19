@@ -6,18 +6,23 @@
 
 {% block body %}
   <h1>Products:</h1>
+
+  <div style="margin-bottom: 20px;">
+      <a href="{% url 'shopapp:product_create' %}">Создать новый продукт</a>
+  </div>
+
   {% if products %}
     <div>
-    {% for product in products %}
-      <div>
-        <p>Name: {{ product.name }}</p>
-        <p>Price: {{ product.price }}</p>
-        <p>Discount: {% firstof product.discount 'no discount' %}</p>
-      </div>
-    {% endfor %}
+      {% for product in products %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <p>Name: <strong>{{ product.name }}</strong></p>
+            <p>Price: {{ product.price }}</p>
+            <p>Discount: {% if product.discount %}{{ product.discount }}{% else %}no discount{% endif %}</p>
 
+            <a href="{% url 'shopapp:product_details' pk=product.pk %}">Подробнее о продукте</a>
+        </div>
+      {% endfor %}
     </div>
-
   {% else %}
     <h3>No products yet</h3>
   {% endif %}

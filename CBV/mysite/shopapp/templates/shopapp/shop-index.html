@@ -4,30 +4,30 @@
   Shop Index
 {% endblock %}
 
-
 {% block body %}
   <h1>Hello Shop Index!</h1>
 
   <div>
     <ul>
       {% for name, price in products %}
-        <li>{{ name }} ({{ name|length }}) for ${{ price }}</li>
-        {% if name|length_is:'7' %}
-          <span>Lucky product!</span>
-        {% endif %}
+        <li>{{ name }} for ${{ price }}</li>
       {% empty %}
-        No products here
+        <li>No products here</li>
       {% endfor %}
-
     </ul>
   </div>
 
   <div>
-    Time running: {{ time_running }}
+    <p>Time running: {{ time_running }}</p>
   </div>
+
+  <hr style="margin: 20px 0;">
 
   <div>
-    {% lorem 3 p random %}
+      <h3>Разделы практической работы:</h3>
+      <ul>
+          <li><a href="{% url 'shopapp:products_list' %}">Перейти к списку продуктов</a></li>
+          <li><a href="{% url 'shopapp:orders_list' %}">Перейти к списку заказов</a></li>
+      </ul>
   </div>
-
 {% endblock %}
