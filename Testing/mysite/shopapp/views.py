@@ -4,8 +4,16 @@ from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, reverse
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import JsonResponse
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .models import Product, Order
 
@@ -13,15 +21,15 @@ from .models import Product, Order
 class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         products = [
-            ('Laptop', 1999),
-            ('Desktop', 2999),
-            ('Smartphone', 999),
+            ("Laptop", 1999),
+            ("Desktop", 2999),
+            ("Smartphone", 999),
         ]
         context = {
             "time_running": default_timer(),
             "products": products,
         }
-        return render(request, 'shopapp/shop-index.html', context=context)
+        return render(request, "shopapp/shop-index.html", context=context)
 
 
 class ProductDetailsView(DetailView):
@@ -67,17 +75,28 @@ class ProductDeleteView(DeleteView):
 
 
 class OrdersListView(LoginRequiredMixin, ListView):
-    queryset = (
-        Order.objects
-        .select_related("user")
-        .prefetch_related("products")
-    )
+    queryset = Order.objects.select_related("user").prefetch_related("products")
 
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
     permission_required = "shopapp.view_order"
-    queryset = (
-        Order.objects
-        .select_related("user")
-        .prefetch_related("products")
-    )
+    queryset = Order.objects.select_related("user").prefetch_related("products")
+
+
+class OrdersDataExportView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.order_by("pk").prefetch_related("products")
+        orders_data = [
+            {
+                "pk": order.pk,
+                "delivery_address": order.delivery_address,
+                "promocode": order.promocode,
+                "user": order.user.pk,
+                "products": [p.pk for p in order.products.all()],
+            }
+            for order in orders
+        ]
+        return JsonResponse({"orders": orders_data})
