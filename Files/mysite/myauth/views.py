@@ -1,17 +1,36 @@
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import (
+    login_required,
+    permission_required,
+    user_passes_test,
+)
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LogoutView
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import (
+    TemplateView,
+    CreateView,
+    UpdateView,
+    ListView,
+    DetailView,
+)
+from django.contrib.auth.models import User
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .models import Profile
 
 
 class AboutMeView(TemplateView):
     template_name = "myauth/about-me.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            Profile.objects.get_or_create(user=self.request.user)
+        context["user"] = self.request.user
+        return context
 
 
 class RegisterView(CreateView):
@@ -35,6 +54,34 @@ class RegisterView(CreateView):
 
 class MyLogoutView(LogoutView):
     next_page = reverse_lazy("myauth:login")
+
+
+class UsersListView(ListView):
+    model = User
+    template_name = "myauth/user_list.html"
+    context_object_name = "users"
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = "myauth/user_detail.html"
+    context_object_name = "user_detail"
+
+
+class ProfileUpdateView(UserPassesTestMixin, UpdateView):
+    model = Profile
+    fields = ["avatar", "bio"]
+    template_name = "myauth/profile_update.html"
+
+    def test_func(self):
+        profile = self.get_object()
+        user = self.request.user
+        if not user.is_authenticated:
+            return False
+        return user.is_staff or user.pk == profile.user.pk
+
+    def get_success_url(self):
+        return reverse("myauth:user_detail", kwargs={"pk": self.object.user.pk})
 
 
 @user_passes_test(lambda u: u.is_superuser)

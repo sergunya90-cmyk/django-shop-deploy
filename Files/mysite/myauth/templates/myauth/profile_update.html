@@ -1,0 +1,16 @@
+{% extends 'myauth/base.html' %}
+
+{% block title %}Обновление профиля{% endblock %}
+
+{% block body %}
+    <h1>Обновление профиля</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить изменения</button>
+    </form>
+    
+    <br>
+    <a href="{% url 'myauth:about-me' %}">Отмена (Назад к профилю)</a>
+{% endblock %}

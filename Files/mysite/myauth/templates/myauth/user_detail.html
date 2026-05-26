@@ -1,0 +1,37 @@
+{% extends 'myauth/base.html' %}
+
+{% block title %}Профиль {{ user_detail.username }}{% endblock %}
+
+{% block body %}
+    <h1>Профиль пользователя: {{ user_detail.username }}</h1>
+
+    <div>
+        <strong>Биография:</strong>
+        {% if user_detail.profile.bio %}
+            {{ user_detail.profile.bio }}
+        {% else %}
+            Не указана
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h3>Аватар:</h3>
+        {% if user_detail.profile.avatar %}
+            <img src="{{ user_detail.profile.avatar.url }}" alt="{{ user_detail.username }} avatar" style="max-width: 250px; border-radius: 8px;">
+        {% else %}
+            <p>Аватарки в профиле пользователя нет.</p>
+        {% endif %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+        {% if request.user.is_staff or request.user.pk == user_detail.pk %}
+            <div style="margin-top: 20px; padding: 10px; background-color: #f0f8ff; border-radius: 5px;">
+                <a href="{% url 'myauth:profile_update' pk=user_detail.profile.pk %}">Изменить профиль пользователя</a>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <div style="margin-top: 20px;">
+        <a href="{% url 'myauth:user_list' %}">⬅ Ко всем пользователям</a>
+    </div>
+{% endblock %}

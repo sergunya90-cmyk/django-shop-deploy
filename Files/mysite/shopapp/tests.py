@@ -29,12 +29,10 @@ class ProductCreateViewTestCase(TestCase):
                 "price": "123.45",
                 "description": "A good table",
                 "discount": "10",
-            }
+            },
         )
         self.assertRedirects(response, reverse("shopapp:products_list"))
-        self.assertTrue(
-            Product.objects.filter(name=self.product_name).exists()
-        )
+        self.assertTrue(Product.objects.filter(name=self.product_name).exists())
 
 
 class ProductDetailsViewTestCase(TestCase):
@@ -61,7 +59,7 @@ class ProductDetailsViewTestCase(TestCase):
 
 class ProductsListViewTestVase(TestCase):
     fixtures = [
-        'products-fixture.json',
+        "products-fixture.json",
     ]
 
     def test_products(self):
@@ -71,7 +69,7 @@ class ProductsListViewTestVase(TestCase):
             values=(p.pk for p in response.context["products"]),
             transform=lambda p: p.pk,
         )
-        self.assertTemplateUsed(response, 'shopapp/products-list.html')
+        self.assertTemplateUsed(response, "shopapp/products-list.html")
 
 
 class OrdersListViewTestCase(TestCase):
@@ -100,7 +98,7 @@ class OrdersListViewTestCase(TestCase):
 
 class ProductsExportViewTestCase(TestCase):
     fixtures = [
-        'products-fixture.json',
+        "products-fixture.json",
     ]
 
     def test_get_products_view(self):
