@@ -13,7 +13,8 @@ class FooBarViewTest(TestCase):
         response = self.client.get(reverse("myauth:foo-bar"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            response.headers['content-type'], 'application/json',
+            response.headers["content-type"],
+            "application/json",
         )
         expected_data = {"spam": "eggs", "foo": "bar"}
         self.assertJSONEqual(response.content, expected_data)

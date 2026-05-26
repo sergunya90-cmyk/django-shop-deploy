@@ -1,20 +1,34 @@
 {% extends 'myauth/base.html' %}
 
-{% block title %}
-  About me
-{% endblock %}
-
+{% block title %}About Me{% endblock %}
 
 {% block body %}
-  <h1>User info</h1>
-  {% if user.is_authenticated %}
-    <h2>Detail</h2>
-    <p>Username: {{ user.username }}</p>
-    <p>First name: {{ user.first_name }}</p>
-    <p>Last name: {{ user.last_name }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Bio: {{ user.profile.bio }}</p>
-  {% else %}
-    <h2>User is anonymous</h2>
-  {% endif %}
+    {% if user.is_authenticated %}
+        <h1>Страница пользователя: {{ user.username }}</h1>
+
+        <div>
+            <strong>Биография:</strong>
+            {% if user.profile.bio %}
+                {{ user.profile.bio }}
+            {% else %}
+                Не указана
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 20px;">
+            <h3>Ваш аватар:</h3>
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }} avatar" style="max-width: 250px; border-radius: 8px;">
+            {% else %}
+                <p>Аватарки в профиле пользователя нет.</p>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'myauth:profile_update' pk=user.profile.pk %}">Изменить профиль и загрузить аватар</a>
+        </div>
+    {% else %}
+        <h2>Вы не авторизованы.</h2>
+        <p>Пожалуйста, <a href="{% url 'myauth:login' %}">войдите в систему</a> или <a href="{% url 'myauth:register' %}">зарегистрируйтесь</a>.</p>
+    {% endif %}
 {% endblock %}
