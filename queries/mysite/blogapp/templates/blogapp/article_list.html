@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список статей</title>
+</head>
+<body>
+    <h1>Блог: Список статей</h1>
+
+    {% for article in articles %}
+        <div style="border: 1px solid #ccc; margin-bottom: 15px; padding: 15px; border-radius: 5px;">
+            <h2>{{ article.title }}</h2>
+            <p><strong>Дата публикации:</strong> {{ article.pub_date }}</p>
+            <p><strong>Автор:</strong> {{ article.author.name }}</p>
+            <p><strong>Категория:</strong> {{ article.category.name }}</p>
+
+            <p><strong>Теги:</strong>
+                {% for tag in article.tags.all %}
+                    <span style="background-color: #eee; padding: 2px 5px; border-radius: 3px;">{{ tag.name }}</span>{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Без тегов
+                {% endfor %}
+            </p>
+        </div>
+    {% empty %}
+        <p>Статей пока нет. Добавьте их через админку или консоль.</p>
+    {% endfor %}
+
+</body>
+</html>

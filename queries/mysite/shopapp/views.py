@@ -4,7 +4,13 @@ from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonRes
 from django.shortcuts import render, reverse
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
@@ -41,15 +47,15 @@ class ProductViewSet(ModelViewSet):
 class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         products = [
-            ('Laptop', 1999),
-            ('Desktop', 2999),
-            ('Smartphone', 999),
+            ("Laptop", 1999),
+            ("Desktop", 2999),
+            ("Smartphone", 999),
         ]
         context = {
             "time_running": default_timer(),
             "products": products,
         }
-        return render(request, 'shopapp/shop-index.html', context=context)
+        return render(request, "shopapp/shop-index.html", context=context)
 
 
 class ProductDetailsView(DetailView):
@@ -107,25 +113,17 @@ class ProductDeleteView(DeleteView):
 
 
 class OrdersListView(LoginRequiredMixin, ListView):
-    queryset = (
-        Order.objects
-        .select_related("user")
-        .prefetch_related("products")
-    )
+    queryset = Order.objects.select_related("user").prefetch_related("products")
 
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
     permission_required = "shopapp.view_order"
-    queryset = (
-        Order.objects
-        .select_related("user")
-        .prefetch_related("products")
-    )
+    queryset = Order.objects.select_related("user").prefetch_related("products")
 
 
 class ProductsDataExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
-        products = Product.objects.order_by('pk').all()
+        products = Product.objects.order_by("pk").all()
         products_data = [
             {
                 "pk": product.pk,
