@@ -7,13 +7,17 @@ import shopapp.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shopapp', '0008_order_receipt'),
+        ("shopapp", "0008_order_receipt"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='preview',
-            field=models.ImageField(blank=True, null=True, upload_to=shopapp.models.product_preview_directory_path),
+            model_name="product",
+            name="preview",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to=shopapp.models.product_preview_directory_path,
+            ),
         ),
     ]
