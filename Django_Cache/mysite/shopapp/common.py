@@ -11,9 +11,6 @@ def save_csv_products(file, encoding):
     )
     reader = DictReader(csv_file)
 
-    products = [
-        Product(**row)
-        for row in reader
-    ]
+    products = [Product(**row) for row in reader]
     Product.objects.bulk_create(products)
     return products

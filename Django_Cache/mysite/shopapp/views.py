@@ -2,11 +2,18 @@ from csv import DictWriter
 from timeit import default_timer
 
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import User
 from rest_framework.parsers import MultiPartParser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -14,6 +21,8 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+from django.core.cache import cache
+from .serializers import OrderSerializer
 
 from .common import save_csv_products
 from .forms import ProductForm
@@ -60,10 +69,7 @@ class ProductViewSet(ModelViewSet):
         writer.writeheader()
 
         for product in queryset:
-            writer.writerow({
-                field: getattr(product, field)
-                for field in fields
-            })
+            writer.writerow({field: getattr(product, field) for field in fields})
 
         return response
 
@@ -84,15 +90,15 @@ class ProductViewSet(ModelViewSet):
 class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         products = [
-            ('Laptop', 1999),
-            ('Desktop', 2999),
-            ('Smartphone', 999),
+            ("Laptop", 1999),
+            ("Desktop", 2999),
+            ("Smartphone", 999),
         ]
         context = {
             "time_running": default_timer(),
             "products": products,
         }
-        return render(request, 'shopapp/shop-index.html', context=context)
+        return render(request, "shopapp/shop-index.html", context=context)
 
 
 class ProductDetailsView(DetailView):
@@ -148,26 +154,17 @@ class ProductDeleteView(DeleteView):
 
 
 class OrdersListView(LoginRequiredMixin, ListView):
-    queryset = (
-        Order.objects
-        .select_related("user")
-        .prefetch_related("products")
-        .all()
-    )
+    queryset = Order.objects.select_related("user").prefetch_related("products").all()
 
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
     permission_required = "shopapp.view_order"
-    queryset = (
-        Order.objects
-        .select_related("user")
-        .prefetch_related("products")
-    )
+    queryset = Order.objects.select_related("user").prefetch_related("products")
 
 
 class ProductsDataExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
-        products = Product.objects.order_by('pk').all()
+        products = Product.objects.order_by("pk").all()
         products_data = [
             {
                 "pk": product.pk,
@@ -178,3 +175,40 @@ class ProductsDataExportView(View):
             for product in products
         ]
         return JsonResponse({"products": products_data})
+
+
+class UserOrdersListView(LoginRequiredMixin, ListView):
+    template_name = "shopapp/user_orders.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        self.owner = get_object_or_404(User, pk=self.kwargs.get("user_id"))
+        return (
+            Order.objects.filter(user=self.owner)
+            .select_related("user")
+            .prefetch_related("products")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["owner"] = self.owner
+        return context
+
+
+class UserOrdersExportView(View):
+    def get(self, request, user_id):
+        cache_key = f"user_{user_id}_orders_export"
+
+        data = cache.get(cache_key)
+
+        if data is None:
+            owner = get_object_or_404(User, pk=user_id)
+
+            orders = Order.objects.filter(user=owner).order_by("pk")
+
+            serializer = OrderSerializer(orders, many=True)
+            data = serializer.data
+
+            cache.set(cache_key, data, 300)
+
+        return JsonResponse({"orders": data})

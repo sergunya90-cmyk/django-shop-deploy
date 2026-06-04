@@ -1,6 +1,5 @@
 from rest_framework import serializers
-
-from .models import Product
+from .models import Product, Order
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -16,3 +15,9 @@ class ProductSerializer(serializers.ModelSerializer):
             "archived",
             "preview",
         )
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = "__all__"
