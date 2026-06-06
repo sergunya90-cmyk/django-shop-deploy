@@ -1,21 +1,18 @@
-[project]
+[tool.poetry]
 name = "mysite"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "user",email = "popov.sergey.info.gold@yansex.kz"}
-]
-requires-python = ">=3.14"
-dependencies = [
-    "django (==4.2)",
-    "django-debug-toolbar (==4.0.0)",
-    "django-filter (==22.1)",
-    "djangorestframework (==3.14.0)",
-    "pillow (>=12.2.0,<13.0.0)",
-    "gunicorn (>=26.0.0,<27.0.0)"
-]
+authors = ["Sergey"]
 
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "4.2"
+django-debug-toolbar = "4.0.0"
+django-filter = "22.1"
+djangorestframework = "3.14.0"
+Pillow = "*"
+gunicorn = "*"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
