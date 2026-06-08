@@ -15,4 +15,4 @@ RUN poetry install --no-interaction --no-ansi
 
 COPY . .
 
-CMD ["gunicorn", "mysite.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "mysite.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1", "--timeout", "120"]
